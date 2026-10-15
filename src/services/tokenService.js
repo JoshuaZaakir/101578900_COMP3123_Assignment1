@@ -2,12 +2,21 @@ const jwt = require('jsonwebtoken');
 const AppError = require('../utils/AppError');
 
 const testSecret = 'assignment-one-test-secret-with-sufficient-length';
+const minimumSecretBytes = 32;
 
 const getJwtSecret = () => {
   const secret = process.env.JWT_SECRET;
 
-  if (secret) {
+  if (secret && Buffer.byteLength(secret, 'utf8') >= minimumSecretBytes) {
     return secret;
+  }
+
+  if (secret) {
+    throw new AppError(
+      500,
+      'CONFIGURATION_ERROR',
+      `JWT_SECRET must be at least ${minimumSecretBytes} UTF-8 bytes long`
+    );
   }
 
   if (process.env.NODE_ENV === 'test') {

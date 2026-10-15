@@ -16,6 +16,7 @@ const {
 } = require('./src/middleware/errorHandler');
 const { databaseStatus } = require('./src/config/database');
 const logger = require('./src/config/logger');
+const { getJwtSecret } = require('./src/services/tokenService');
 
 morgan.token('safe-path', (req) => req.originalUrl.split('?')[0]);
 
@@ -50,10 +51,6 @@ const createApp = (options = {}) => {
     })
   );
 
-  if (autoConnect) {
-    app.use(ensureDatabaseConnection);
-  }
-
   app.get('/health', (_req, res) => {
     const status = databaseStatus();
 
@@ -63,6 +60,19 @@ const createApp = (options = {}) => {
       database: { status },
       timestamp: new Date().toISOString(),
     });
+  });
+
+  if (autoConnect) {
+    app.use(ensureDatabaseConnection);
+  }
+
+  app.use('/api', (_req, _res, next) => {
+    try {
+      getJwtSecret();
+      next();
+    } catch (error) {
+      next(error);
+    }
   });
 
   const authenticationLimiter = disableRateLimit

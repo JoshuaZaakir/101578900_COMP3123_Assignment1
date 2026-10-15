@@ -125,9 +125,8 @@ beforeAll(async () => {
   process.env.NODE_ENV = 'test';
   process.env.JWT_SECRET = 'assignment-test-secret-that-is-long-enough';
   process.env.JWT_EXPIRES_IN = '1h';
-  process.env.AUTH_RATE_LIMIT_WINDOW_MS = '60000';
   process.env.AUTH_RATE_LIMIT_MAX = '5';
-  process.env.API_RATE_LIMIT_WINDOW_MS = '60000';
+  process.env.RATE_LIMIT_WINDOW_MS = '60000';
   process.env.API_RATE_LIMIT_MAX = '500';
 
   mongoServer = await MongoMemoryServer.create({
@@ -177,6 +176,22 @@ describe('API infrastructure and security headers', () => {
     expect(response.headers['x-content-type-options']).toBe('nosniff');
     expect(response.headers['x-frame-options']).toMatch(/DENY|SAMEORIGIN/i);
     expect(response.headers['content-security-policy']).toEqual(expect.any(String));
+  });
+
+  test('rejects JWT secrets shorter than 32 UTF-8 bytes', async () => {
+    const originalSecret = process.env.JWT_SECRET;
+    const { getJwtSecret } = require('../src/services/tokenService');
+
+    try {
+      process.env.JWT_SECRET = 'too-short';
+      expect(() => getJwtSecret()).toThrow(/at least 32 UTF-8 bytes/);
+
+      const response = await request(app).post(SIGNUP_URL).send(userA);
+      expectJsonError(response, 500);
+      expect(response.body.error.code).toBe('CONFIGURATION_ERROR');
+    } finally {
+      process.env.JWT_SECRET = originalSecret;
+    }
   });
 });
 
@@ -230,6 +245,17 @@ describe('POST /api/v1/user/signup', () => {
   ])('rejects %s with 400 Bad Request', async (_label, payload) => {
     const response = await signup(payload);
     expectJsonError(response, 400);
+  });
+
+  test('rejects passwords longer than 72 UTF-8 bytes', async () => {
+    const response = await signup({
+      username: 'unicode_password',
+      email: 'unicode.password@example.com',
+      password: `StrongPass1!${'é'.repeat(31)}`,
+    });
+
+    expectJsonError(response, 400);
+    expect(JSON.stringify(response.body)).toMatch(/72 UTF-8 bytes/);
   });
 });
 

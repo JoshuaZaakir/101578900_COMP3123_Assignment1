@@ -5,6 +5,12 @@ const { connectDatabase } = require('../src/config/database');
 const logger = require('../src/config/logger');
 
 module.exports = async (req, res) => {
+  const requestPath = String(req.url || '').split('?')[0];
+
+  if (requestPath === '/health') {
+    return app(req, res);
+  }
+
   try {
     await connectDatabase();
     return app(req, res);

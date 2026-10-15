@@ -133,7 +133,7 @@ The `user` field is assigned from the verified JWT. A client cannot choose or re
    cp .env.example .env
    ```
 
-4. Replace the example `JWT_SECRET` in `.env` with a long random value. Do not commit `.env`.
+4. Replace the example `JWT_SECRET` in `.env` with a random value of at least 32 UTF-8 bytes. Do not commit `.env`.
 
 5. Start MongoDB using one of these options:
 
@@ -172,7 +172,7 @@ The `user` field is assigned from the verified JWT. A client cannot choose or re
 | `PORT` | No | `3000` | Local HTTP port. Vercel supplies its own runtime port. |
 | `MONGODB_URI` | Yes | `mongodb://127.0.0.1:27017/comp3123_assignment1` | MongoDB connection string. |
 | `MONGODB_DB_NAME` | No | `comp3123_assignment1` | Explicit database name; keep the required assignment value unchanged. |
-| `JWT_SECRET` | Yes | safe placeholder in `.env.example` | Private key used to sign and verify JWTs. |
+| `JWT_SECRET` | Yes | safe placeholder in `.env.example` | Private key used to sign and verify JWTs; must be at least 32 UTF-8 bytes. |
 | `JWT_EXPIRES_IN` | No | `1h` | JWT lifetime accepted by `jsonwebtoken`. |
 | `LOG_LEVEL` | No | `info` | Minimum Winston log level. |
 | `LOG_DIR` | No | `logs` | Local generated-log directory. |
@@ -253,7 +253,7 @@ The assignment's endpoint spelling, version prefix, methods, and success codes a
 
 | Endpoint | Expected statuses |
 | --- | --- |
-| `GET /health` | `200` while the Express handler is reachable; `status` can report a degraded database connection. The serverless entry point can return `503` if it cannot establish its initial database connection. |
+| `GET /health` | `200` while the Express handler is reachable; `status` reports `degraded` if MongoDB is unavailable. API operations return `503` while the database cannot be reached. |
 | `POST /api/v1/user/signup` | `201` created, `400` validation/body error, `409` duplicate username/email, `429` rate limited, `500` unexpected error, or `503` unavailable database on the serverless entry point. |
 | `POST /api/v1/user/login` | `200` authenticated, `400` validation/body error, `401` invalid credentials, `429` rate limited, `500` unexpected error, or `503` unavailable database on the serverless entry point. |
 | `GET /api/v1/emp/employees` | `200` success, `401` missing/invalid/expired JWT, `429` rate limited, `500` unexpected error, or `503` unavailable database on the serverless entry point. |
@@ -401,11 +401,11 @@ Validation failures return useful field information without echoing passwords or
 
 ### Password protection
 
-Passwords are salted and hashed with bcrypt before they are written to MongoDB. Login compares the supplied password with the saved hash. Password hashes are excluded from API responses, and passwords are excluded from logs.
+Passwords are salted and hashed with bcrypt before they are written to MongoDB. Login compares the supplied password with the saved hash. Passwords are limited to 72 UTF-8 bytes so bcrypt cannot silently truncate two different values to the same input. Password hashes are excluded from API responses, and passwords are excluded from logs.
 
 ### JWT protection
 
-JWTs are signed with the private `JWT_SECRET`, include the authenticated user's identity, and expire according to `JWT_EXPIRES_IN`. The secret is read from the environment and is never committed.
+JWTs are signed with the private `JWT_SECRET`, include the authenticated user's identity, and expire according to `JWT_EXPIRES_IN`. The application rejects secrets shorter than 32 UTF-8 bytes. The secret is read from the environment and is never committed.
 
 ### Helmet
 
