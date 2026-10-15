@@ -1,0 +1,8 @@
+{"level":"info","message":"Database connection established","database":"comp3123_assignment1","service":"employee-api","timestamp":"2026-10-14T18:00:00.000Z"}
+{"level":"info","message":"API server started","port":3000,"service":"employee-api","timestamp":"2026-10-14T18:00:00.250Z"}
+{"level":"info","message":"HTTP request","request":"::1 GET /health 200 4.000 ms","service":"employee-api","timestamp":"2026-10-14T18:00:03.120Z"}
+{"level":"info","message":"User account created","userId":"68ef00000000000000000001","service":"employee-api","timestamp":"2026-10-14T18:00:11.456Z"}
+{"level":"warn","message":"Login attempt rejected","ip":"::1","service":"employee-api","timestamp":"2026-10-14T18:00:17.890Z"}
+{"level":"warn","message":"Request validation failed","method":"POST","path":"/api/v1/emp/employees","fields":["email"],"service":"employee-api","timestamp":"2026-10-14T18:00:25.234Z"}
+{"level":"warn","message":"Employee ownership check failed","employeeId":"68ef00000000000000000002","userId":"68ef00000000000000000001","service":"employee-api","timestamp":"2026-10-14T18:00:31.678Z"}
+{"level":"info","message":"Employee deleted","employeeId":"68ef00000000000000000003","userId":"68ef00000000000000000001","service":"employee-api","timestamp":"2026-10-14T18:00:42.012Z"}
