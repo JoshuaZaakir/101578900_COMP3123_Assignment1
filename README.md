@@ -8,6 +8,7 @@ This project is a RESTful backend API for user accounts and employee management.
 
 ## Deployed API
 
+- GitHub repository: [github.com/JoshuaZaakir/101578900_COMP3123_Assignment1](https://github.com/JoshuaZaakir/101578900_COMP3123_Assignment1)
 - Local base URL: `http://localhost:3000`
 - Vercel base URL: `Add the deployed Vercel URL here before submission`
 - Health check: `GET /health`
@@ -109,7 +110,7 @@ The `user` field is assigned from the verified JWT. A client cannot choose or re
 1. Clone the repository and open it:
 
    ```bash
-   git clone <GitHub-repository-URL>
+   git clone https://github.com/JoshuaZaakir/101578900_COMP3123_Assignment1.git
    cd 101578900_COMP3123_Assignment1
    ```
 
@@ -579,7 +580,7 @@ Use [docs/SCREENSHOT_CHECKLIST.md](docs/SCREENSHOT_CHECKLIST.md) to capture and 
 
 Before submission:
 
-- Add the GitHub and Vercel URLs to the README and DOCX.
+- Add the deployed Vercel URL to the README and add both GitHub and Vercel URLs to the DOCX.
 - Export the final Postman collection.
 - Put all labeled screenshots into one DOCX.
 - Remove `node_modules` before creating the ZIP.
