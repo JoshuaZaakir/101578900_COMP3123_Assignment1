@@ -51,8 +51,6 @@ This project is a RESTful backend API for user accounts and employee management.
 ```text
 101578900_COMP3123_Assignment1/
 ├── api/                         # Vercel serverless entry point
-├── docs/
-│   └── SCREENSHOT_CHECKLIST.md  # Ordered assignment evidence checklist
 ├── logs/
 │   ├── .gitkeep
 │   └── sample.log               # Sanitized example; generated logs are ignored
@@ -565,7 +563,7 @@ The official hosting reference supplied with the assignment is [Using Express.js
 
 ## Evidence and submission workflow
 
-Use [docs/SCREENSHOT_CHECKLIST.md](docs/SCREENSHOT_CHECKLIST.md) to capture and name evidence. The final DOCX should show:
+The final DOCX should show:
 
 - every success endpoint and exact status code;
 - validation, duplicate, authentication, invalid-ID, not-found, and unsupported-route errors;
