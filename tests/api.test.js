@@ -166,8 +166,8 @@ describe('API infrastructure and security headers', () => {
 
     expect(response.status).toBe(200);
     expect(response.headers['content-type']).toMatch(/application\/json/i);
-    expect(response.body).toEqual(expect.any(Object));
-    expect(response.body.status ?? response.body.message).toEqual(expect.any(String));
+    expect(response.body.status).toBe('ok');
+    expect(response.body.database).toEqual({ status: 'connected' });
   });
 
   test('Helmet adds common HTTP security headers', async () => {

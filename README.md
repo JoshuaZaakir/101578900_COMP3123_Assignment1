@@ -10,7 +10,7 @@ This project is a secure REST API for user authentication and employee managemen
 
 - **GitHub:** [github.com/JoshuaZaakir/101578900_COMP3123_Assignment1](https://github.com/JoshuaZaakir/101578900_COMP3123_Assignment1)
 - **Local URL:** `http://localhost:3000`
-- **Vercel URL:** Add after deployment
+- **Vercel URL:** [101578900-comp-3123-assignment1.vercel.app](https://101578900-comp-3123-assignment1.vercel.app)
 
 ## Technologies
 
@@ -38,7 +38,6 @@ This project is a secure REST API for user authentication and employee managemen
 ## Project structure
 
 ```text
-api/                 Vercel entry point
 logs/                Local log directory and sanitized sample
 postman/             Exported Postman collection
 src/
